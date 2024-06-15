@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dice Game</title>
+    <style>
+        .container {
+            width: 80%;
+            margin: auto;
+            text-align: center;
+        }
+
+        .dice-container {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+        }
+
+        .dice {
+            text-align: center;
+            margin: 10px;
+        }
+
+        body {
+            background-color: #042f4b;
+            margin: 0;
+        }
+
+        h1 {
+            margin: 30px;
+            font-family: "Lobster", cursive;
+            text-shadow: 5px 0 #232931;
+            font-size: 4.5rem;
+            color: #4ecca3;
+            text-align: center;
+        }
+
+        p {
+            font-size: 2rem;
+            color: #4ecca3;
+            font-family: "Indie Flower", cursive;
+        }
+
+        img {
+            width: 100px;
+            height: 100px;
+        }
+
+        .bottom {
+            padding-top: 30px;
+        }
+
+        .btn {
+            background: #4ecca3;
+            font-family: "Indie Flower", cursive;
+            border-radius: 7px;
+            color: #ffff;
+            font-size: 30px;
+            padding: 16px 25px;
+            text-decoration: none;
+            margin: 10px;
+        }
+
+        .btn:hover {
+            background: #232931;
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Let's Play</h1>
+
+        <div class="dice-container">
+            <div class="dice">
+                <p class="Player1">Player1</p>
+                <img src="dice6.png" alt="dice 6" class="img1">
+            </div>
+            <div class="dice">
+                <p class="Player2">Player2</p>
+                <img src="dice6.png" alt="dice 6" class="img2">
+            </div>
+            <div class="dice">
+                <p class="Player3">Player3</p>
+                <img src="dice6.png" alt="dice 6" class="img3">
+            </div>
+            <div class="dice">
+                <p class="Player4">Player4</p>
+                <img src="dice6.png" alt="dice 6" class="img4">
+            </div>
+        </div>
+
+        <div class="container bottom">
+            <button type="button" class="btn" onclick="rollTheDice()">Roll The Dice</button>
+            <button type="button" class="btn" onclick="editNames()">Edit Names</button>
+            <button type="button" class="btn" onclick="newGame()">New Game</button>
+        </div>
+    </div>
+
+    <script>
+        let player1 = "Player1";
+        let player2 = "Player2";
+        let player3 = "Player3";
+        let player4 = "Player4";
+
+        let scores = { Player1: 0, Player2: 0, Player3: 0, Player4: 0 };
+        let rounds = 0;
+
+        function editNames() {
+            player1 = prompt("Change Player1 Name") || player1;
+            player2 = prompt("Change Player2 Name") || player2;
+            player3 = prompt("Change Player3 Name") || player3;
+            player4 = prompt("Change Player4 Name") || player4;
+
+            document.querySelector("p.Player1").innerHTML = player1;
+            document.querySelector("p.Player2").innerHTML = player2;
+            document.querySelector("p.Player3").innerHTML = player3;
+            document.querySelector("p.Player4").innerHTML = player4;
+
+            scores = { [player1]: 0, [player2]: 0, [player3]: 0, [player4]: 0 };
+            rounds = 0;
+            document.querySelector('h1').innerHTML = "Let's Play";
+        }
+
+        function rollTheDice() {
+            if (rounds >= 3) {
+                alert("Game over! Please start a new game to play again.");
+                return;
+            }
+
+            let diceNum1 = document.querySelector(".img1");
+            let diceNum2 = document.querySelector(".img2");
+            let diceNum3 = document.querySelector(".img3");
+            let diceNum4 = document.querySelector(".img4");
+
+            diceNum1.setAttribute("src", "diceroll.gif");
+            diceNum2.setAttribute("src", "diceroll.gif");
+            diceNum3.setAttribute("src", "diceroll.gif");
+            diceNum4.setAttribute("src", "diceroll.gif");
+
+            let result = document.querySelector('h1');
+            result.innerHTML = "";
+
+            setTimeout(() => {
+                let randomNumber1 = Math.floor(Math.random() * 6) + 1;
+                let randomNumber2 = Math.floor(Math.random() * 6) + 1;
+                let randomNumber3 = Math.floor(Math.random() * 6) + 1;
+                let randomNumber4 = Math.floor(Math.random() * 6) + 1;
+
+                diceNum1.setAttribute('src', 'dice' + randomNumber1 + '.png');
+                diceNum2.setAttribute('src', 'dice' + randomNumber2 + '.png');
+                diceNum3.setAttribute('src', 'dice' + randomNumber3 + '.png');
+                diceNum4.setAttribute('src', 'dice' + randomNumber4 + '.png');
+
+                scores[player1] += randomNumber1;
+                scores[player2] += randomNumber2;
+                scores[player3] += randomNumber3;
+                scores[player4] += randomNumber4;
+
+                rounds++;
+                if (rounds >= 3) {
+                    let winner = Object.keys(scores).reduce((a, b) => scores[a] > scores[b] ? a : b);
+                    result.innerHTML = `${winner} WINS with ${scores[winner]} points!`;
+                } else {
+                    result.innerHTML = `Round ${rounds} Complete! Roll Again.`;
+                }
+            }, 2500);
+        }
+
+        function newGame() {
+            scores = { [player1]: 0, [player2]: 0, [player3]: 0, [player4]: 0 };
+            rounds = 0;
+            document.querySelector('.img1').setAttribute('src', 'dice6.png');
+            document.querySelector('.img2').setAttribute('src', 'dice6.png');
+            document.querySelector('.img3').setAttribute('src', 'dice6.png');
+            document.querySelector('.img4').setAttribute('src', 'dice6.png');
+            document.querySelector('h1').innerHTML = "Let's Play";
+        }
+    </script>
+</body>
+
+</html>
